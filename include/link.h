@@ -1,9 +1,10 @@
-#define MAXLINKS
 
+#define MAXLINKS 50
 
 /*
  * DataStructure to hold all the links
  */
+
 struct linker {
 
 };

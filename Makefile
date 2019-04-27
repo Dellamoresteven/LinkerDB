@@ -1,5 +1,5 @@
-make: system/database.c
-	gcc -o linkerDB system/database.c
+make: system/database.cc
+	g++ -o linkerDB system/database.cc
 
 clean:
 	rm -f linkerDB
