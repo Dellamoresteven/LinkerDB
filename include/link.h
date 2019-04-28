@@ -6,7 +6,7 @@
  */
 
 struct linker {
-
+	
 };
 
 extern struct linker linker_table[MAXLINKS];

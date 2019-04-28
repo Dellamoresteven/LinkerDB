@@ -1,8 +1,6 @@
-#include <stdio.h>
-
 #include "../include/LinkerDB.h"
 
-
-int main(){
+int main(void){
+  initDB();
   printf("Hello World\n");
 }

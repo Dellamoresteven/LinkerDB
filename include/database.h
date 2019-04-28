@@ -1,7 +1,9 @@
+#include <iostream>
 
+#define MAXLINKS 50
 
-struct database_table {
-  
+struct database_t {
+
 };
 
-extern struct database_table database_table[MAXLINKS];
+extern struct database_t database_table[MAXLINKS];
