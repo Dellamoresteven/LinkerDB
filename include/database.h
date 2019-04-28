@@ -1,9 +1,14 @@
-#include <iostream>
 
-#define MAXLINKS 50
+#define MAXTABLES 50
+#define DEBUGMSG 1
 
-struct database_t {
-
+enum command_state_table {
+  COMMAND_START,
+  NEWDB
 };
 
-extern struct database_t database_table[MAXLINKS];
+struct database_t {
+  std::unordered_map<std::string, table_t> database_names;
+};
+
+extern struct database_t database_table;

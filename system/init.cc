@@ -1,10 +1,13 @@
 #include "../include/LinkerDB.h"
 
 
-struct database_t database_table[MAXLINKS]; /* database_table */
+struct database_t database_table; /* database_table */
 
 void initDB(){
   /* read from logs */
-  
-  printf("InitDB\n");
+  for(int i = 0; i < MAXTABLES; i++){
+
+  }
+  if(DEBUGMSG) printf("InitDB\n");
+
 }
