@@ -3,5 +3,5 @@ LinkerDB
 
 #### This is a Database I created to use for my self
 
-## Create database 
- * NEWDB name
+## Create database
+ * `NEWDB name`

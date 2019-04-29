@@ -4,7 +4,9 @@
 
 enum command_state_table {
   COMMAND_START,
-  NEWDB
+  NEWDB,
+  TABLE_LOOKUP,
+  PUT
 };
 
 struct database_t {

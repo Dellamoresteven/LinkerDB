@@ -8,6 +8,5 @@
 #include <stdio.h>
 
 #include "table.h"
-#include "link.h"
 #include "database.h"
 #include "init.h"
