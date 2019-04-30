@@ -8,6 +8,6 @@ void initDB(){
   for(int i = 0; i < MAXTABLES; i++){
 
   }
-  if(DEBUGMSG) printf("InitDB\n");
+  if(INIT_DEBUG) printf("InitDB\n");
 
 }

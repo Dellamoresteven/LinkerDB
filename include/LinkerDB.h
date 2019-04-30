@@ -6,6 +6,7 @@
 #include <string>
 #include <string.h>
 #include <stdio.h>
+#include <vector>
 
 #include "table.h"
 #include "database.h"
