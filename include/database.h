@@ -17,7 +17,8 @@ enum command_state_table {
   TABLE_LOOKUP,
   PUT,
   GET,
-  PRINT
+  PRINT,
+  NEWLINK
 };
 
 extern std::unordered_map<std::string, table_t> database_table;

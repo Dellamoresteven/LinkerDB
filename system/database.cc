@@ -10,11 +10,12 @@ int keyWordSearch(std::string key, int stage){
   }
   else if(key == "PUT"){
     return PUT;
-  }
-  else if(key == "GET"){
+  }else if(key == "GET"){
     return GET;
   }else if(key == "PRINT"){
     return PRINT;
+  }else if(key == "NEWLINK"){
+    return NEWLINK;
   }
   /* return the current stage if keyword is not found */
   return stage;
@@ -43,14 +44,10 @@ int main(void){
       /* checks for spaces */
       if(input.at(i) == ' '){
         if(COMMAND_START_DEBUG) printf("command = %s on stage %d\n", command.c_str(), stage);
-        
+
         /* Prints the DB's (For testing Only) */
         if(command == "printDB"){
-          printf("\n\nDB NAMES\n\n");
-          /* Goes through the database_table map */
-          for ( auto it = database_table.begin(); it != database_table.end(); ++it )
-            std::cout << it->first << std::endl;
-          printf("\n\n\n");
+          printDB();
           break;
         }
 
@@ -64,6 +61,9 @@ int main(void){
           case PRINT: {
             if(PRINT_DEBUG) printf("PRINT: %s\n", command.c_str());
             headTable = tableSearch(command);
+            printTable(headTable);
+            for ( auto it = headTable->data.begin(); it != headTable->data.end(); ++it )
+              std::cout << it->first << std::endl;
             break;
           }
 
@@ -145,7 +145,6 @@ int main(void){
                 headTable->data.insert(std::make_pair(keys.at(j), newEntry));
               }
             }
-
             break;
           }
 
@@ -158,6 +157,7 @@ int main(void){
            */
           case TABLE_LOOKUP: {
             headTable = tableSearch(command);
+            break;
           }
 
           /* Create the new Database */
