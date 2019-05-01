@@ -7,6 +7,7 @@
 #define TABLE_LOOKUP_DEBUG 1
 #define PUT_DEBUG 1
 #define GET_DEBUG 1
+#define PRINT_DEBUG 1
 #define INIT_DEBUG 1
 /* ------------------------------------------------------------------------------ */
 
@@ -15,11 +16,8 @@ enum command_state_table {
   NEWDB,
   TABLE_LOOKUP,
   PUT,
-  GET
+  GET,
+  PRINT
 };
 
-struct database_t {
-  std::unordered_map<std::string, table_t> database_names;
-};
-
-extern struct database_t database_table;
+extern std::unordered_map<std::string, table_t> database_table;

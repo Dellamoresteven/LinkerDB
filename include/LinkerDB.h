@@ -11,3 +11,4 @@
 #include "table.h"
 #include "database.h"
 #include "init.h"
+#include "tableLookup.h"
