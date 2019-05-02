@@ -16,6 +16,8 @@ int keyWordSearch(std::string key, int stage){
     return PRINT;
   }else if(key == "NEWLINK"){
     return NEWLINK;
+  } else if(key == "printStruc"){
+    return PRINTSTRUC;
   }
   /* return the current stage if keyword is not found */
   return stage;
@@ -58,12 +60,16 @@ int main(void){
         /* A switch statment to know where in the command you should be */
         switch(stage){
 
+          case PRINTSTRUC: {
+            headTable = tableSearch(command);
+            printStructure(headTable);
+            break;
+          }
+
           case PRINT: {
             if(PRINT_DEBUG) printf("PRINT: %s\n", command.c_str());
             headTable = tableSearch(command);
             printTable(headTable);
-            for ( auto it = headTable->data.begin(); it != headTable->data.end(); ++it )
-              std::cout << it->first << std::endl;
             break;
           }
 
