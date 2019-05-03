@@ -13,3 +13,4 @@
 #include "init.h"
 #include "tableLookup.h"
 #include "print.h"
+#include "seperateCommand.h"

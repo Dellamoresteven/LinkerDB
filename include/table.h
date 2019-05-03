@@ -1,7 +1,7 @@
 
 /* should i be using this? */
 union data_e {
-  // std::vector<std::string>;
+
 };
 
 /* this is where all the data for a given table will be held */

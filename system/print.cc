@@ -31,8 +31,8 @@ void printTable(table_t * table){
  * Prints the structure from where specified down (can specifiy how far you want to go down)
  *
  * example: PRINTSTRUCTURE Rhythm
- * example: PRINTSTRUCTURE Rhythm 5 
+ * example: PRINTSTRUCTURE Rhythm 5
  */
-void printStructure(table_t * table){
+void printStructure(table_t * table, int depth){
 
 }
