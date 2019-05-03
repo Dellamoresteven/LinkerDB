@@ -9,6 +9,7 @@
 #define GET_DEBUG 1
 #define PRINT_DEBUG 1
 #define INIT_DEBUG 1
+#define RESPONSE_DEBUG 1
 /* ------------------------------------------------------------------------------ */
 
 enum command_state_table {

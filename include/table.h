@@ -1,9 +1,4 @@
 
-/* should i be using this? */
-union data_e {
-
-};
-
 /* this is where all the data for a given table will be held */
 struct data_t {
   // std::vector<data_e> data;
