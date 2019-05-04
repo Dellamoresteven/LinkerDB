@@ -7,6 +7,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <vector>
+#include <locale>
+#include <fstream>
 
 #include "table.h"
 #include "database.h"
@@ -15,3 +17,4 @@
 #include "print.h"
 #include "seperateCommand.h"
 #include "response.h"
+#include "write.h"

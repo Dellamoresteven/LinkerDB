@@ -5,6 +5,10 @@
 
 int keyWordSearch(std::string key, int stage){
   /* checks for keywords in the command */
+
+  /* Changes key to a fully uppercase version */
+  std::transform(key.begin(), key.end(),key.begin(), ::toupper);
+  /* Checks Keywords */
   if(key == "NEWDB"){
     return NEWDB;
   } else if(key == "PUT"){
@@ -17,6 +21,8 @@ int keyWordSearch(std::string key, int stage){
     return NEWLINK;
   } else if(key == "printStruc"){
     return PRINTSTRUC;
+  } else if(key == "EXIT"){
+    write();
   }
   /* return the current stage if keyword is not found */
   return stage;
@@ -31,7 +37,8 @@ int main(void){
 
   /* Full command */
   std::string input;
-  std::vector<std:> toks;
+  /* Tokens vector */
+  std::vector<std::string> toks;
   while(true){
     if(COMMAND_START_DEBUG) printf("Command: \n");
     getline(std::cin, input);
@@ -62,15 +69,25 @@ int main(void){
       /* A switch statment to know where in the command you should be */
       switch(stage){
 
+        /**
+         * Creating a new link
+         *
+         * example: Rhythm NEWLINK user
+         * This will make Rhythm->user exist
+         *
+         * example: Rhythm->user NEWLINK steven
+         * This will make Rhythm->user->steven exist
+         */
         case NEWLINK: {
-          table_t t;
-          t.table_name = toks.at(i);
+          table_t * t = new table_t;
+          t->table_name = toks.at(i);
           headTable->linked_table_names.insert(std::make_pair(toks.at(i), t));
           break;
         }
 
         case PRINTSTRUC: {
           headTable = tableSearch(toks.at(i));
+          if(headTable->table_name == "-1"){ toks.clear(); }
           printStructure(headTable,5);
           stage = TABLE_LOOKUP;
           break;
@@ -79,6 +96,7 @@ int main(void){
         case PRINT: {
           if(PRINT_DEBUG) printf("PRINT: %s\n", toks.at(i).c_str());
           headTable = tableSearch(toks.at(i));
+          if(headTable->table_name == "-1"){ toks.clear(); }
           printTable(headTable);
           stage = TABLE_LOOKUP;
           break;
@@ -161,6 +179,7 @@ int main(void){
          */
         case TABLE_LOOKUP: {
           headTable = tableSearch(toks.at(i));
+          if(headTable->table_name == "-1"){ toks.clear(); }
           break;
         }
 

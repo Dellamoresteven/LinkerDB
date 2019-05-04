@@ -3,7 +3,7 @@
 
 /* -----------------------DEBUG STATMENTS---------------------------------------- */
 #define COMMAND_START_DEBUG 1
-#define NEWDB_DEBUG 1
+#define NEWDB_DEBUG 0
 #define TABLE_LOOKUP_DEBUG 1
 #define PUT_DEBUG 1
 #define GET_DEBUG 1
