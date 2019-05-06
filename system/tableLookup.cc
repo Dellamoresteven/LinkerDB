@@ -23,9 +23,7 @@ table_t * tableSearch(std::string path){
           if(TABLE_LOOKUP_DEBUG) printf("Found DB\n");
         }else{
           if(TABLE_LOOKUP_DEBUG) printf("Could not find DB\n");
-          printf("FAEW\n");
           return a();
-          // return -1;
         }
       }else{
         /* seraching for the entry in the linked_table_names data struct */
@@ -38,7 +36,6 @@ table_t * tableSearch(std::string path){
         }else{ /* Does not exist */
           if(TABLE_LOOKUP_DEBUG) printf("Could not find table %s\n", tableCommand.c_str());
           return a();
-          break;
         }
         /* Reseeting the tableLookup string */
 

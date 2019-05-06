@@ -19,10 +19,12 @@ int keyWordSearch(std::string key, int stage){
     return PRINT;
   } else if(key == "NEWLINK"){
     return NEWLINK;
-  } else if(key == "printStruc"){
+  } else if(key == "PRINTSTRUC"){
     return PRINTSTRUC;
   } else if(key == "EXIT"){
     write();
+  } else if(key == "DESC"){
+    return DESC;
   }
   /* return the current stage if keyword is not found */
   return stage;
@@ -39,6 +41,12 @@ int main(void){
   std::string input;
   /* Tokens vector */
   std::vector<std::string> toks;
+
+  /* Lambda function to form a response */
+  auto resp = [=](std::vector<std::string> vec) -> std::string {
+
+  };
+
   while(true){
     if(COMMAND_START_DEBUG) printf("Command: \n");
     getline(std::cin, input);
@@ -87,7 +95,7 @@ int main(void){
 
         case PRINTSTRUC: {
           headTable = tableSearch(toks.at(i));
-          if(headTable->table_name == "-1"){ toks.clear(); }
+          if(headTable->table_name == "-1"){ toks.clear(); break; }
           printStructure(headTable,5);
           stage = TABLE_LOOKUP;
           break;
@@ -96,9 +104,16 @@ int main(void){
         case PRINT: {
           if(PRINT_DEBUG) printf("PRINT: %s\n", toks.at(i).c_str());
           headTable = tableSearch(toks.at(i));
-          if(headTable->table_name == "-1"){ toks.clear(); }
+          if(headTable->table_name == "-1"){ toks.clear(); break; }
           printTable(headTable);
           stage = TABLE_LOOKUP;
+          break;
+        }
+
+        case DESC: {
+          headTable = tableSearch(toks.at(i));
+          if(headTable->table_name == "-1"){ toks.clear(); break; }
+          describeTable(headTable);
           break;
         }
 
