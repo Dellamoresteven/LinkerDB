@@ -2,13 +2,13 @@
 #define MAXTABLES 50
 
 /* -----------------------DEBUG STATMENTS---------------------------------------- */
-#define COMMAND_START_DEBUG 1
+#define COMMAND_START_DEBUG 0
 #define NEWDB_DEBUG 0
-#define TABLE_LOOKUP_DEBUG 1
-#define PUT_DEBUG 1
-#define GET_DEBUG 1
-#define PRINT_DEBUG 1
-#define INIT_DEBUG 1
+#define TABLE_LOOKUP_DEBUG 0
+#define PUT_DEBUG 0
+#define GET_DEBUG 0
+#define PRINT_DEBUG 0
+#define INIT_DEBUG 0
 #define RESPONSE_DEBUG 1
 /* ------------------------------------------------------------------------------ */
 

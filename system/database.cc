@@ -33,31 +33,35 @@ int keyWordSearch(std::string key, int stage){
 
 
 int main(void){
-
   /* Init all system values (including reading from logs) */
   initDB();
-
   /* Full command */
   std::string input;
   /* Tokens vector */
   std::vector<std::string> toks;
-
-  /* Lambda function to form a response */
-  auto resp = [=](std::vector<std::string> vec) -> std::string {
-
-  };
-
-  while(true){
+  /* This is the response being sent over to response.cc */
+  std::string resp;
+  for(;;){
     if(COMMAND_START_DEBUG) printf("Command: \n");
+    resp = "";
+    /* Grabs user command in String format */
     getline(std::cin, input);
+    /* Clear my token array out for the next command */
     toks.clear();
+    /* clear my resp token */
+    resp = "";
+    /* This function will seperate the strings into the tokens for easy use */
     seperateCommand(input, toks);
+
     if(COMMAND_START_DEBUG){
       for(auto i : toks){
         printf("Toks: %s\n", i.c_str());
       }
     }
+    /* This is the head table that all the functions will look at */
     table_t * headTable;
+    /* This is that path, used for response/debug reasons */
+    std::string headTablePath;
 
     /* init new command to COMMAND_START */
     int stage = TABLE_LOOKUP;
@@ -70,8 +74,10 @@ int main(void){
         break;
       }
 
+      /* Changes the stage if need be */
       int newStage = keyWordSearch(toks.at(i), stage);
 
+      /* If the stage is subject to change */
       if(newStage != stage) {stage = newStage; toks.at(i) = ""; continue;}
 
       /* A switch statment to know where in the command you should be */
@@ -93,25 +99,49 @@ int main(void){
           break;
         }
 
+        /**
+         * Prints a visual interpretation of a database
+         *
+         * THIS FUNCTION IS NOT YET WORKING SORZ
+         */
         case PRINTSTRUC: {
           headTable = tableSearch(toks.at(i));
+          headTablePath = toks.at(i);
           if(headTable->table_name == "-1"){ toks.clear(); break; }
           printStructure(headTable,5);
           stage = TABLE_LOOKUP;
           break;
         }
 
+        /**
+         * Prints all contents in the link specfied
+         *
+         * example: print Rhythm
+         * Prints all data inside Rhythm
+         * example: print Rhythm->user
+         * prints all contents inside Rhythm DB and user link
+         */
         case PRINT: {
           if(PRINT_DEBUG) printf("PRINT: %s\n", toks.at(i).c_str());
           headTable = tableSearch(toks.at(i));
+          headTablePath = toks.at(i);
           if(headTable->table_name == "-1"){ toks.clear(); break; }
           printTable(headTable);
           stage = TABLE_LOOKUP;
           break;
         }
 
+        /**
+         * Prints all the links inside a given table
+         *
+         * example: print Rhythm
+         * Prints all links inside rhythm (like user)
+         * example: print Rhythm->user
+         * prints all links inside of Rhythm, user link
+         */
         case DESC: {
           headTable = tableSearch(toks.at(i));
+          headTablePath = toks.at(i);
           if(headTable->table_name == "-1"){ toks.clear(); break; }
           describeTable(headTable);
           break;
@@ -133,10 +163,13 @@ int main(void){
           auto checksearch = headTable->data.find(toks.at(i));
 
           if(checksearch != headTable->data.end()){ /* found */
-            printf("Found: %s = %s\n", toks.at(i).c_str(), (checksearch->second.str_data).c_str());
+            if(GET_DEBUG) printf("Found: %s = %s\n", toks.at(i).c_str(), (checksearch->second.str_data).c_str());
+            resp = ("Found '" + toks.at(i) + "' = '" + checksearch->second.str_data + "' in '" + headTablePath + "'");
           }else{ /* Did not find */
-            printf("Did not find %s\n", toks.at(i).c_str());
+            resp = "Did not find '" + toks.at(i) + "' in '" + headTablePath + "'";
+            if(GET_DEBUG) printf("Did not find %s\n", toks.at(i).c_str());
           }
+          formResponse(resp, stage);
           break;
         }
 
@@ -169,10 +202,10 @@ int main(void){
             }
             i++;
           }
-
+          resp = "Inserted";
           for(int j = 0; j < keys.size(); j++){
+            resp += (" '" + keys.at(j) + "' = '" + values.at(j) + "'");
             auto search = headTable->data.find(keys.at(j));
-
             if(search != headTable->data.end()){ /* already created */
               search->second.str_data = values.at(j);
             }else{ /* not created */
@@ -180,8 +213,10 @@ int main(void){
               newEntry.str_data = values.at(j);
               headTable->data.insert(std::make_pair(keys.at(j), newEntry));
             }
-
           }
+          resp += " into '" + headTablePath + "'";
+          formResponse(resp, stage);
+          // printf("%s", resp("Inserted\n").c_str());
           break;
         }
 
@@ -194,7 +229,8 @@ int main(void){
          */
         case TABLE_LOOKUP: {
           headTable = tableSearch(toks.at(i));
-          if(headTable->table_name == "-1"){ toks.clear(); }
+          headTablePath = toks.at(i);
+          if(headTable->table_name == "-1"){ resp = "No such link as '" + toks.at(i) + "'";  formResponse(resp, stage); toks.clear(); }
           break;
         }
 
@@ -204,7 +240,8 @@ int main(void){
           bk.table_name = toks.at(i);
           if(NEWDB_DEBUG) printf("NEW DB NAME:%s\n", toks.at(i).c_str());
           database_table.insert(std::make_pair(toks.at(i), bk));
-          formResponse(toks.at(i), stage);
+          resp = "Database '" + toks.at(i) + "' was created!";
+          formResponse(resp, stage);
           break;
         }
       }

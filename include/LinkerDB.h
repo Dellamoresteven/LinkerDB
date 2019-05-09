@@ -9,6 +9,7 @@
 #include <vector>
 #include <locale>
 #include <fstream>
+#include <cstdarg>
 
 #include "table.h"
 #include "database.h"
