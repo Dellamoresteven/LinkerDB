@@ -1,3 +1,6 @@
 *.o
 linkerDB
 logs/
+.DS_Store
+ser
+cli1
