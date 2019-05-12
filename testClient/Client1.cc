@@ -2,6 +2,8 @@
  * DISCLAIMER: THIS CODE IS COPIED FROM https://medium.com/from-the-scratch/http-server-what-do-you-need-to-know-to-build-a-simple-http-server-from-scratch-d1ef8945e4fa
  * PLEASE GIVE CREDIT FOR HIS AMAZING TUTORAL! I WILL REWRITE THIS WHEN I GO THROUGH TESTING
  * tl dr: not my code
+ *
+ * Some of this code has been motified to let me send multiple messages TCP like. (Connection like)
  */
 
 #include <stdio.h>
@@ -17,6 +19,7 @@
 
 int main(int argc, char const *argv[])
 {
+  for(;;){
     int sock = 0; long valread;
     struct sockaddr_in serv_addr;
     std::string req;
@@ -39,20 +42,20 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-
-
-    for(;;){
-      getline(std::cin, req);
-      if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-      {
-          printf("\nConnection Failed \n");
-          return -1;
-      }
-      send(sock , req.c_str(), req.length() , 0 );
-      valread = read(sock , buffer, 1024);
-      printf("%s\n", buffer);
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        printf("\nConnection Failed\n");
+        return -1;
     }
 
+    printf("WUT0\n");
+    getline(std::cin, req);
+    printf("WUT1\n");
 
+    send(sock , req.c_str(), req.length() , 0);
+    printf("WUT2\n");
+    valread = read(sock , buffer, 1024);
+    printf("%s\n", buffer);
+    printf("WUT3\n");
+  }
     return 0;
 }

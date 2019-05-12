@@ -20,8 +20,11 @@ void processCommand(int);
    send that back to the requester */
 int main(int argc, char const *argv[])
 {
+  /* The servers Socket */
   int server_fd;
+  /* For incoming connections */
   int new_socket;
+  /* The strcut needed for accepting sockets */
   struct sockaddr_in address;
   /* need this for binding new sockets */
   int addrlen = sizeof(address);
@@ -47,10 +50,10 @@ int main(int argc, char const *argv[])
   bind(server_fd, (struct sockaddr *)&address, sizeof(address));
 
   /* Starting listening */
-  listen(server_fd, 30);
+  listen(server_fd, 5);
 
   for(;;){
-    printf("\n=========== Waiting ===========\n\n");
+    if(debug) printf("\n=========== Waiting ===========\n\n");
 
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
       perror("Error accept");
@@ -65,13 +68,11 @@ int main(int argc, char const *argv[])
     pid_t ret = fork();
 
     if (ret == 0) { /* Child */
+      close(server_fd);
       processCommand(new_socket);
-      close(new_socket);
-      exit(1);
+      exit(0);
     }
-    printf("\n\nEFASDF\n\n");
     close(new_socket);
-    printf("\n\nEFASDF2\n\n");
   }
 
   return 0;
@@ -79,13 +80,12 @@ int main(int argc, char const *argv[])
 
 /* @link LINE: 12 */
 void processCommand(int fd){
-  return;
-  // std::string resp = "MY RESPONSE";
-  // char buffer[30000] = {0};
-  // long valread = read( fd , buffer, 30000);
-  //
-  // write(fd , resp.c_str() , resp.length());
-  // printf("------------------Incomming Message-------------------\n");
-  // printf("%s\n", buffer);
-  // printf("-------------------------Done-------------------------\n");
+  std::string resp = "MY RESPONSE";
+  char buffer[30000] = {0};
+  long valread = read(fd , buffer, 30000);
+
+  write(fd , resp.c_str() , resp.length());
+  if(debug) printf("------------------Incomming Message-------------------\n");
+  if(debug) printf("%s\n", buffer);
+  if(debug) printf("-------------------------Done-------------------------\n");
 }
