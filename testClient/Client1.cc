@@ -39,17 +39,18 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-    {
-        printf("\nConnection Failed \n");
-        return -1;
-    }
+
 
     for(;;){
       getline(std::cin, req);
+      if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+      {
+          printf("\nConnection Failed \n");
+          return -1;
+      }
       send(sock , req.c_str(), req.length() , 0 );
       valread = read(sock , buffer, 1024);
-      printf("%s\n",buffer );
+      printf("%s\n", buffer);
     }
 
 
