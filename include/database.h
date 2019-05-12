@@ -24,4 +24,6 @@ enum command_state_table {
   DESC
 };
 
+std::string databaseHandler(std::string input);
+
 extern std::unordered_map<std::string, table_t> database_table;

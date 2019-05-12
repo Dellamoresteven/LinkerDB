@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include "../include/LinkerDB.h"
+
 #define PORT 8080
 
 /**
@@ -53,7 +55,7 @@ int main(int argc, char const *argv[])
   listen(server_fd, 5);
 
   for(;;){
-    if(debug) printf("\n=========== Waiting ===========\n\n");
+    if(debug) printf("\n================= Waiting ==================\n\n");
 
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
       perror("Error accept");
@@ -83,9 +85,12 @@ void processCommand(int fd){
   std::string resp = "MY RESPONSE";
   char buffer[30000] = {0};
   long valread = read(fd , buffer, 30000);
-
-  write(fd , resp.c_str() , resp.length());
+  std::string input = buffer;
+  std::string output = databaseHandler(input);
+  write(fd , output.c_str() , output.length());
   if(debug) printf("------------------Incomming Message-------------------\n");
-  if(debug) printf("%s\n", buffer);
-  if(debug) printf("-------------------------Done-------------------------\n");
+  if(debug) printf("%s\n", input.c_str());
+  if(debug) printf("------------------------Sending-----------------------\n");
+  if(debug) printf("%s\n", output.c_str());
+  if(debug) printf("--------------------------Done------------------------\n");
 }
