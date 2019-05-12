@@ -47,15 +47,10 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    printf("WUT0\n");
     getline(std::cin, req);
-    printf("WUT1\n");
-
     send(sock , req.c_str(), req.length() , 0);
-    printf("WUT2\n");
     valread = read(sock , buffer, 1024);
     printf("%s\n", buffer);
-    printf("WUT3\n");
   }
     return 0;
 }

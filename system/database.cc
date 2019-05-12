@@ -35,6 +35,7 @@ std::string databaseHandler(std::string input){
   std::vector<std::string> toks;
   /* This is the response being sent over to response.cc */
   std::string resp;
+  
   if(COMMAND_START_DEBUG) printf("Command: \n");
   resp = "";
   /* Clear my token array out for the next command */
@@ -182,8 +183,6 @@ std::string databaseHandler(std::string input){
           resp = "Did not find '" + toks.at(i) + "' in '" + headTablePath + "'";
           if(GET_DEBUG) printf("Did not find %s\n", toks.at(i).c_str());
         }
-        /* Sends response to formResponse in response.cc */
-        formResponse(resp, stage);
         /* Done! */
         break;
       }
@@ -242,8 +241,6 @@ std::string databaseHandler(std::string input){
           }
         }
         resp += " into '" + headTablePath + "'";
-        /* Sending my response to my reponse handler */
-        formResponse(resp, stage);
         /* Done! */
         break;
       }
@@ -261,7 +258,7 @@ std::string databaseHandler(std::string input){
         /* Sets the headpath to the new value */
         headTablePath = toks.at(i);
         /* Checks to make sure it exists */
-        if(headTable->table_name == "-1"){ resp = "No such link as '" + toks.at(i) + "'";  formResponse(resp, stage); toks.clear(); }
+        if(headTable->table_name == "-1"){ resp = "No such link as '" + toks.at(i) + "'"; toks.clear(); }
         /* Done! */
         break;
       }
@@ -278,13 +275,13 @@ std::string databaseHandler(std::string input){
         /* Forms response */
         resp = "Database '" + toks.at(i) + "' was created!";
         /* Sending my response to my reponse handler */
-        formResponse(resp, stage);
+
         /* Done! */
         break;
       }
     }
   }
-  return resp;
+  return formResponse(resp, stage);;
 }
 
 

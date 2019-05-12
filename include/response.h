@@ -1,2 +1,2 @@
 
-void formResponse(std::string, int);
+std::string formResponse(std::string, int);
