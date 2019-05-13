@@ -7,7 +7,7 @@ void write(){
     std::string filename = "logs/" + it->first + ".txt";
     fd.open(filename.c_str());
 
-    table_t * table = &(it->second);
+    table_t * table = (it->second);
 
     writeDataInTable(table, fd);
 

@@ -277,16 +277,16 @@ std::string databaseHandler(std::string input){
       case NEWDB: {
         std::mutex newdbMTX;
         /* creats a new table_t */
-        table_t bk;
+        table_t * bk = new table_t;
         /* Sets the name to the Database name */
-        bk.table_name = toks.at(i);
+        bk->table_name = toks.at(i);
         if(NEWDB_DEBUG) printf("NEW DB NAME:%s\n", toks.at(i).c_str());
         /* Locking it up */
         newdbMTX.lock();
         /* insertings the name and the table as a pair into the database_table map */
         database_table.insert(std::make_pair(toks.at(i), bk));
         /* Unlocking */
-        newdbMTX.lock();
+        newdbMTX.unlock();
         /* Forms response */
         resp = "Database '" + toks.at(i) + "' was created!";
         /* Done! */

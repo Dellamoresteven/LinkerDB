@@ -19,7 +19,7 @@ table_t * tableSearch(std::string path){
         auto search = database_table.find(tableCommand);
         if(search != database_table.end()){
           /* set the returnTable of that DB */
-          returnTable = &(search->second);
+          returnTable = (search->second);
           if(TABLE_LOOKUP_DEBUG) printf("Found DB\n");
         }else{
           if(TABLE_LOOKUP_DEBUG) printf("Could not find DB\n");
@@ -55,7 +55,7 @@ table_t * tableSearch(std::string path){
     check = false;
     auto search = database_table.find(tableCommand);
     if(search != database_table.end()){
-      returnTable = &(search->second);
+      returnTable = (search->second);
       if(TABLE_LOOKUP_DEBUG) printf("Found in DB-end\n");
     }else{
       if(TABLE_LOOKUP_DEBUG) printf("Could not find in DB-end\n");

@@ -1,6 +1,6 @@
 #include "../include/LinkerDB.h"
 
-std::unordered_map<std::string, table_t> database_table;
+std::unordered_map<std::string, table_t *> database_table;
 
 void initDB(){
   /* read from logs */
