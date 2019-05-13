@@ -17,6 +17,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <thread>
+#include <dirent.h>
 
 #include "table.h"
 #include "database.h"
@@ -26,3 +27,4 @@
 #include "seperateCommand.h"
 #include "response.h"
 #include "write.h"
+#include "read.h"

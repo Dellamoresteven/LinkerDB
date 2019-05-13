@@ -9,7 +9,6 @@
 #include "../include/LinkerDB.h"
 
 #define PORT 8080
-#define threadAmount 5
 
 /**
  *  This function will accept a proccess and send the command to database.cc and
@@ -30,6 +29,7 @@ int main(int argc, char *argv[])
   }
 
   initDB();
+  read();
   /* The servers Socket */
   int server_fd;
   /* For incoming connections */
@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
   int addrlen = sizeof(address);
   /* Thread vector */
   std::vector<std::thread> workers;
-  // pthread_t workers[threadAmount];
 
   /**
    *  Creating my socket
@@ -67,7 +66,6 @@ int main(int argc, char *argv[])
 
   for(;;){
     if(debug) printf("\n================= Waiting ==================\n\n");
-    printf("HERE %lu\n", database_table.size());
 
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
       perror("Error accept");

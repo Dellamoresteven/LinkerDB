@@ -1,6 +1,7 @@
 
 #include "../include/LinkerDB.h"
 
+/* see tableLookup.h */
 table_t * tableSearch(std::string path){
   std::string tableCommand;
   table_t * returnTable;

@@ -40,8 +40,8 @@ std::string databaseHandler(std::string input){
   resp = "";
   /* Clear my token array out for the next command */
   toks.clear();
-  /* clear my resp token */
-  resp = "";
+  /* init new command to COMMAND_START */
+  int stage = TABLE_LOOKUP;
   /* This function will seperate the strings into the tokens for easy use */
   seperateCommand(input, toks);
 
@@ -54,9 +54,6 @@ std::string databaseHandler(std::string input){
   table_t * headTable;
   /* This is that path, used for response/debug reasons */
   std::string headTablePath;
-
-  /* init new command to COMMAND_START */
-  int stage = TABLE_LOOKUP;
   /* Runs through all the tokens */
   for(int i = 0; i < toks.size(); i++){
     /* Prints the DB's (For testing Only) */

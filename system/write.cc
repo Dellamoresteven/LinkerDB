@@ -17,9 +17,12 @@ void write(){
 }
 
 void writeDataInTable(table_t * table, std::ofstream & fd){
-  fd << ",\n";
   fd << table->table_name << "\n";
   for ( auto it = table->data.begin(); it != table->data.end(); ++it ){
     fd << it->first << "=" << it->second.str_data << "\n";
   }
+  for ( auto it = table->linked_table_names.begin(); it != table->linked_table_names.end(); ++it ){
+    writeDataInTable(it->second, fd);
+  }
+  return;
 }
