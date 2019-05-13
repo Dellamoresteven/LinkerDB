@@ -84,12 +84,17 @@ std::string databaseHandler(std::string input){
        * This will make Rhythm->user->steven exist
        */
       case NEWLINK: {
+        std::mutex newlinkMTX;
         /* Sets up new table */
         table_t * t = new table_t;
         /* adds the table name */
         t->table_name = toks.at(i);
+        /* Lock it up */
+        newlinkMTX.lock();
         /* inserts it in the tableHead */
         headTable->linked_table_names.insert(std::make_pair(toks.at(i), t));
+        /* Unlocking */
+        newlinkMTX.unlock();
         /* Done! */
         break;
       }
@@ -197,6 +202,7 @@ std::string databaseHandler(std::string input){
        * This will go into Rhythm DB and PUT name = steve, age = 21, sex = male
        */
       case PUT: {
+        std::mutex putMTX;
         if(PUT_DEBUG) printf("PUT: %s\n", toks.at(i).c_str());
         /* Keys for the incoming Values */
         std::vector<std::string> keys;
@@ -225,6 +231,8 @@ std::string databaseHandler(std::string input){
         }
         /* Start my response */
         resp = "Inserted";
+        /* Locking up the function */
+        putMTX.lock(); // I could make this shorter but I would rather do it like this
         for(int j = 0; j < keys.size(); j++){
           resp += (" '" + keys.at(j) + "' = '" + values.at(j) + "'");
           auto search = headTable->data.find(keys.at(j));
@@ -241,6 +249,8 @@ std::string databaseHandler(std::string input){
           }
         }
         resp += " into '" + headTablePath + "'";
+        /* Unlocking the function */
+        putMTX.unlock();
         /* Done! */
         break;
       }
@@ -265,13 +275,18 @@ std::string databaseHandler(std::string input){
 
       /* Create the new Database */
       case NEWDB: {
+        std::mutex newdbMTX;
         /* creats a new table_t */
         table_t bk;
         /* Sets the name to the Database name */
         bk.table_name = toks.at(i);
         if(NEWDB_DEBUG) printf("NEW DB NAME:%s\n", toks.at(i).c_str());
+        /* Locking it up */
+        newdbMTX.lock();
         /* insertings the name and the table as a pair into the database_table map */
         database_table.insert(std::make_pair(toks.at(i), bk));
+        /* Unlocking */
+        newdbMTX.lock();
         /* Forms response */
         resp = "Database '" + toks.at(i) + "' was created!";
         /* Done! */
