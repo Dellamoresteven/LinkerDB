@@ -19,12 +19,13 @@ void printDB(){
  *
  * example: print hello->user->steven
  */
-void printTable(table_t * table){
-  printf("\n\nTable %s \n\n", table->table_name.c_str());
+std::string printTable(table_t * table){
+  std::string resp;
+  resp = "\n{\n";
   for ( auto it = table->data.begin(); it != table->data.end(); ++it )
-    printf("%s = %s\n", it->first.c_str(), it->second.str_data.c_str());
-  printf("\n\n");
-  return;
+    resp += (it->first + ": " + it->second.str_data + ",\n");
+  resp += "}\n";
+  return resp;
 }
 
 /**
@@ -38,14 +39,15 @@ void printStructure(table_t * table, int depth){
 }
 
 /**
- * Prints the links that connect to the specified table
+ * Prints the links that connect to the specified link
  *
  * example: DESC Rhythm
  * example: DESC Rhythm->user
  */
-void describeTable(table_t * table){
-  printf("\n\nLinked Tables In %s \n\n", table->table_name.c_str());
+std::string describeTable(table_t * table){
+  std::string resp = "\n{\n";
   for ( auto it = table->linked_table_names.begin(); it != table->linked_table_names.end(); ++it )
-    std::cout << it->first << std::endl;
-  printf("\n\n\n");
+    resp += it->first + ",\n";
+  resp += "}\n";
+  return resp;
 }

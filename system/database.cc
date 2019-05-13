@@ -95,6 +95,8 @@ std::string databaseHandler(std::string input){
         headTable->linked_table_names.insert(std::make_pair(toks.at(i), t));
         /* Unlocking */
         newlinkMTX.unlock();
+        /* Sets response OK */
+        resp = "OK";
         /* Done! */
         break;
       }
@@ -136,7 +138,7 @@ std::string databaseHandler(std::string input){
         /* Checks to make sure it exists */
         if(headTable->table_name == "-1"){ toks.clear(); break; }
         /* Sends in to the printTable function in print.cc */
-        printTable(headTable);
+        resp = printTable(headTable);
         /* Modifies the stage once print is done */
         stage = TABLE_LOOKUP;
         /* Done! */
@@ -159,7 +161,7 @@ std::string databaseHandler(std::string input){
         /* Checks to make sure it exists */
         if(headTable->table_name == "-1"){ toks.clear(); break; }
         /* Sends in to the describeTable function in print.cc */
-        describeTable(headTable);
+        resp = describeTable(headTable);
         /* Done! */
         break;
       }
@@ -182,7 +184,8 @@ std::string databaseHandler(std::string input){
         if(checksearch != headTable->data.end()){ /* found */
           if(GET_DEBUG) printf("Found: %s = %s\n", toks.at(i).c_str(), (checksearch->second.str_data).c_str());
           /* Forms response if found */
-          resp = ("Found '" + toks.at(i) + "' = '" + checksearch->second.str_data + "' in '" + headTablePath + "'");
+          // resp = ("Found '" + toks.at(i) + "' = '" + checksearch->second.str_data + "' in '" + headTablePath + "'");
+          resp = "{" + toks.at(i) + ":" + " " + checksearch->second.str_data + "}";
         }else{ /* Did not find */
           /* Forms response if not found */
           resp = "Did not find '" + toks.at(i) + "' in '" + headTablePath + "'";
@@ -230,7 +233,7 @@ std::string databaseHandler(std::string input){
           i++;
         }
         /* Start my response */
-        resp = "Inserted";
+        // resp = "Inserted";
         /* Locking up the function */
         putMTX.lock(); // I could make this shorter but I would rather do it like this
         for(int j = 0; j < keys.size(); j++){
@@ -248,7 +251,8 @@ std::string databaseHandler(std::string input){
             headTable->data.insert(std::make_pair(keys.at(j), newEntry));
           }
         }
-        resp += " into '" + headTablePath + "'";
+        resp = "OK";
+        // resp += " into '" + headTablePath + "'";
         /* Unlocking the function */
         putMTX.unlock();
         /* Done! */
@@ -288,7 +292,8 @@ std::string databaseHandler(std::string input){
         /* Unlocking */
         newdbMTX.unlock();
         /* Forms response */
-        resp = "Database '" + toks.at(i) + "' was created!";
+        // resp = "Database '" + toks.at(i) + "' was created!";
+        resp = "OK";
         /* Done! */
         break;
       }
