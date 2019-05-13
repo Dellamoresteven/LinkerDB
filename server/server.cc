@@ -9,6 +9,7 @@
 #include "../include/LinkerDB.h"
 
 #define PORT 8080
+#define threadAm 5
 
 /**
  *  This function will accept a proccess and send the command to database.cc and
@@ -22,6 +23,7 @@ void processCommand(int);
    send that back to the requester */
 int main(int argc, char const *argv[])
 {
+  initDB();
   /* The servers Socket */
   int server_fd;
   /* For incoming connections */
@@ -30,6 +32,8 @@ int main(int argc, char const *argv[])
   struct sockaddr_in address;
   /* need this for binding new sockets */
   int addrlen = sizeof(address);
+  /* Thread vector */
+  std::vector<std::thread> workers;
 
   /**
    *  Creating my socket
@@ -56,24 +60,27 @@ int main(int argc, char const *argv[])
 
   for(;;){
     if(debug) printf("\n================= Waiting ==================\n\n");
+    printf("HERE %lu\n", database_table.size());
 
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
       perror("Error accept");
       exit(EXIT_FAILURE);
     }
+    
+    processCommand(new_socket);
     /* I am going to create a new process to process the request sent by the user.
        The reason I am doing it this way is for scaleabilty, I want to be able to
        get a lot of requests and be able to process them quickly and safely. As
        learned in CS252 pool of proccess is the way to go */
-
+    // std::thread t1(processCommand, new_socket);
     /* Fork the new request */
-    pid_t ret = fork();
-
-    if (ret == 0) { /* Child */
-      close(server_fd);
-      processCommand(new_socket);
-      exit(0);
-    }
+    // pid_t ret = fork();
+    //
+    // if (ret == 0) { /* Child */
+    //   close(server_fd);
+    //   processCommand(new_socket);
+    //   exit(0);
+    // }
     close(new_socket);
   }
 

@@ -10,6 +10,13 @@
 #include <locale>
 #include <fstream>
 #include <cstdarg>
+#include <pthread.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <thread>
 
 #include "table.h"
 #include "database.h"

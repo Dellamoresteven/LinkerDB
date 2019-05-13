@@ -35,7 +35,7 @@ std::string databaseHandler(std::string input){
   std::vector<std::string> toks;
   /* This is the response being sent over to response.cc */
   std::string resp;
-  
+
   if(COMMAND_START_DEBUG) printf("Command: \n");
   resp = "";
   /* Clear my token array out for the next command */
@@ -274,14 +274,12 @@ std::string databaseHandler(std::string input){
         database_table.insert(std::make_pair(toks.at(i), bk));
         /* Forms response */
         resp = "Database '" + toks.at(i) + "' was created!";
-        /* Sending my response to my reponse handler */
-
         /* Done! */
         break;
       }
     }
   }
-  return formResponse(resp, stage);;
+  return formResponse(resp, stage);
 }
 
 
