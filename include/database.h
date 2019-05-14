@@ -34,6 +34,6 @@ enum command_state_table {
 * If you are looking for desciption of commands you can     *
 * look inside this file for examples                        *
 ************************************************************/
-std::string databaseHandler(std::string input);
+std::string databaseHandler(std::string input, bool flag);
 
 extern std::unordered_map<std::string, table_t *> database_table;

@@ -1,28 +1,30 @@
 #include "../include/LinkerDB.h"
 
+std::mutex writeMTX;
 
-void write(){
-  for ( auto it = database_table.begin(); it != database_table.end(); ++it ){
-    std::ofstream fd;
-    std::string filename = "logs/" + it->first + ".txt";
-    fd.open(filename.c_str());
-
-    table_t * table = (it->second);
-
-    writeDataInTable(table, fd);
-
-    fd.close();
-  }
-  exit(1);
+/* see write.h */
+void writeThreadHandler(std::string command){
+  std::thread(writeDataInTable, command).detach();
+  // writeDataInTable(command);
 }
 
-void writeDataInTable(table_t * table, std::ofstream & fd){
-  fd << table->table_name << "\n";
-  for ( auto it = table->data.begin(); it != table->data.end(); ++it ){
-    fd << it->first << "=" << it->second.str_data << "\n";
+/* see write.h */
+void writeDataInTable(std::string str){
+  writeMTX.lock();
+  printf("CommandWrite: %s\n",str.c_str());
+  std::ofstream fd;
+  std::string filename = "logs/";
+  std::string word;
+  for(auto i : str){
+    if(i == '-' || i == ' '){
+      filename += (word + ".txt");
+      break;
+    }
+    word += i;
   }
-  for ( auto it = table->linked_table_names.begin(); it != table->linked_table_names.end(); ++it ){
-    writeDataInTable(it->second, fd);
-  }
-  return;
+  fd.open(filename.c_str(), std::ofstream::out | std::ofstream::app);
+  fd << str;
+  fd << ",\n";
+  fd.close();
+  writeMTX.unlock();
 }

@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
     /* I had to switch off using processes because I need to keep my global datastructures
        in tact. So instead I am going use threads since threads can share global datastrcutres
        assumming atomic actions */
-    workers.push_back(std::thread(processCommand, new_socket));
+    std::thread(processCommand, new_socket).detach();
+    // workers.push_back(std::thread(processCommand, new_socket));
   }
   return 0;
 }
@@ -100,7 +101,7 @@ void processCommand(int fd){
   char buffer[30000] = {0};
   long valread = read(fd , buffer, 30000);
   std::string input = buffer;
-  std::string output = databaseHandler(input);
+  std::string output = databaseHandler(input, false);
   write(fd , output.c_str() , output.length());
   if(debug) printf("------------------Incomming Message-------------------\n");
   if(debug) printf("%s\n", input.c_str());

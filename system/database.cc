@@ -2,7 +2,6 @@
 #include "../include/LinkerDB.h"
 
 
-
 int keyWordSearch(std::string key, int stage){
   /* checks for keywords in the command */
 
@@ -22,7 +21,7 @@ int keyWordSearch(std::string key, int stage){
   } else if(key == "PRINTSTRUC"){
     return PRINTSTRUC;
   } else if(key == "EXIT"){
-    write();
+    exit(0);
   } else if(key == "DESC"){
     return DESC;
   }
@@ -30,7 +29,7 @@ int keyWordSearch(std::string key, int stage){
   return stage;
 }
 
-std::string databaseHandler(std::string input){
+std::string databaseHandler(std::string input, bool flag){
   /* Tokens vector */
   std::vector<std::string> toks;
   /* This is the response being sent over to response.cc */
@@ -82,6 +81,8 @@ std::string databaseHandler(std::string input){
        */
       case NEWLINK: {
         std::mutex newlinkMTX;
+        /* sets up my writeStr */
+        std::string writeStr = (toks.at(i-2) + " newlink " + toks.at(i));
         /* Sets up new table */
         table_t * t = new table_t;
         /* adds the table name */
@@ -92,6 +93,8 @@ std::string databaseHandler(std::string input){
         headTable->linked_table_names.insert(std::make_pair(toks.at(i), t));
         /* Unlocking */
         newlinkMTX.unlock();
+        /* Sends the command */
+        if(!flag) { writeThreadHandler(writeStr); }
         /* Sets response OK */
         resp = "OK";
         /* Done! */
@@ -203,6 +206,8 @@ std::string databaseHandler(std::string input){
        */
       case PUT: {
         std::mutex putMTX;
+        /* This is going to be the string i send to write.cc */
+        std::string writeStr = (toks.at(i-2) + " put ");
         if(PUT_DEBUG) printf("PUT: %s\n", toks.at(i).c_str());
         /* Keys for the incoming Values */
         std::vector<std::string> keys;
@@ -220,17 +225,22 @@ std::string databaseHandler(std::string input){
 
           if(toks.at(i) == "="){
             isEqualsChar = false;
+            writeStr += "=";
           }else if(isEqualsChar){
             keys.push_back(toks.at(i));
+            if(toks.at(i+1) == "=") { writeStr += toks.at(i); }
+            else { writeStr += (toks.at(i) + ","); }
           }else{
             values.push_back(toks.at(i));
+            if(i+1 >= toks.size()) { writeStr += toks.at(i); }
+            else { writeStr += (toks.at(i) + ","); }
           }
           /* Since i am reading future tokens I want to make sure I do
              not read them later so i increment 'i' */
           i++;
         }
-        /* Start my response */
-        // resp = "Inserted";
+        /* Sending to write */
+        if(!flag) { writeThreadHandler(writeStr); }
         /* Locking up the function */
         putMTX.lock(); // I could make this shorter but I would rather do it like this
         for(int j = 0; j < keys.size(); j++){
@@ -249,7 +259,6 @@ std::string databaseHandler(std::string input){
           }
         }
         resp = "OK";
-        // resp += " into '" + headTablePath + "'";
         /* Unlocking the function */
         putMTX.unlock();
         /* Done! */

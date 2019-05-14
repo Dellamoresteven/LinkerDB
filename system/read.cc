@@ -29,14 +29,16 @@ void read(){
       command = ("newdb " + filename);
       printf("Command = %s\n", command.c_str());
       /* Sending the command to my database handler */
-      databaseHandler(command);
+      databaseHandler(command, true);
+      /* Reset */
+      command = "";
       /* reading from each file (reading into char x) */
       while (inFile >> x) {
         /* ',' tells us the command is over */
         if(x == ','){
           printf("Command = %s\n", command.c_str());
           /* dispatches the command to the hnalder */
-          databaseHandler(command);
+          databaseHandler(command, true);
           /* resets command */
           command = " ";
         }else if(x != '\n'){ //Want everything besides ',' and '\n'

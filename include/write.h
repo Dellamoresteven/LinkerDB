@@ -1,4 +1,4 @@
 
-void write();
+void writeThreadHandler(std::string);
 
-void writeDataInTable(table_t *, std::ofstream &);
+void writeDataInTable(std::string);
